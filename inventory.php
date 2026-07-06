@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit(); 
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -198,7 +205,9 @@
             </tbody>
         </table>
     </div>
-
+<div style="text-align: right; margin-bottom: 20px; margin-top: 20px;">
+    <a href="logout.php" style="background-color: #e74c3c; color: white; padding: 8px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-left: 10px;">Logout</a>
+</div>
 </body>
 
 </html>
