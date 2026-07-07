@@ -7,207 +7,143 @@ if (!isset($_SESSION['username'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Product Inventory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Product Inventory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            /* Isse form ke niche table aayegi */
-            align-items: center;
+            background-color: #f8f9fa;
         }
-
-        .form-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            width: 100%;
-            max-width: 450px;
-            margin-bottom: 40px;
-         
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 1px;
         }
-
-        h2,
-        h3 {
-            color: #333;
-            text-align: center;
+        .product-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.2s;
         }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-            font-weight: 500;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            background-color: #4a90e2;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #357abd;
-        }
-
-        
-        .table-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            width: 100%;
-            max-width: 700px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            /* Borders ko aapas me chipkane ke liye */
-            margin-top: 15px;
-        }
-
-        th,
-        td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #4a90e2;
-            color: white;
-            font-weight: 600;
-        }
-
-        tr:hover {
-            background-color: #f9f9f9;
-        }
-
-        
-
-        .btn-delete {
-            background-color: #e74c3c;
-            color: white;
-            padding: 6px 12px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 13px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .btn-delete:hover {
-            background-color: #c0392b;
-        }
-
-        .btn-edit {
-            background-color: #f39c12;
-            color: white;
-            padding: 6px 12px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 13px;
-            font-weight: bold;
-            margin-right: 5px;
-            transition: background 0.3s;
-        }
-
-        .btn-edit:hover {
-            background-color: #d35400;
+        .product-img:hover {
+            transform: scale(1.2); 
         }
     </style>
 </head>
-
 <body>
 
-    <div class="form-container">
-        <h2>Add New Product 🛒</h2>
-        <form action="add_product.php" method="POST">
-            <div class="form-group">
-                <label>Product Name</label>
-                <input type="text" name="p_name" placeholder="e.g. iPhone 15" required>
-            </div>
-            <div class="form-group">
-                <label>Price (₹)</label>
-                <input type="number" step="0.01" name="p_price" placeholder="e.g. 79999" required>
-            </div>
-            <div class="form-group">
-                <label>Stock Quantity</label>
-                <input type="number" name="p_stock" placeholder="e.g. 15" required>
-            </div>
-            <button type="submit" name="add_product_btn">Add To Inventory</button>
-        </form>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="#"><i class="fa-solid fa-boxes-stacked me-2"></i>IMS DASHBOARD</a>
+        <div class="ms-auto d-flex align-items-center">
+            <span class="text-white-50 me-3"><i class="fa-regular fa-user me-1"></i> Welcome, <strong><?php echo htmlspecialchars($_SESSION['username']); ?></strong></span>
+            <a href="logout.php" class="btn btn-sm btn-danger fw-bold rounded-pill px-3"><i class="fa-solid fa-right-from-bracket me-1"></i> Logout</a>
+        </div>
     </div>
+</nav>
 
-    <div class="table-container">
-        <h3>Live Shop Inventory 📋</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Stock Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-              
-                include 'connection.php';
-
-                $sql = "SELECT * FROM inventory";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
+<div class="container mb-5">
+    <div class="row g-4">
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-3">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-dark mb-3"><i class="fa-solid fa-cart-plus text-primary me-2"></i>Add New Product</h5>
+                    <hr class="text-muted">
                     
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $row['id'] . "</td>";
-                        echo "<td>" . $row['product_name'] . "</td>";
-                        echo "<td>₹" . $row['price'] . "</td>";
-                        echo "<td>" . $row['stock'] . " items</td>";
-                      
-                        echo "<td>";
-                        echo "<a href='edit.php?edit_id=" . $row['id'] . "' class='btn-edit'>Edit</a>";
-                        echo "<a href='delete.php?delete_id=" . $row['id'] . "' class='btn-delete'>Delete</a>";
-                        echo "</td>";
-                    }
-                } else {
-                    echo "<tr><td colspan='4' style='text-align:center;'>Abhi koi product nahi hai shop me.</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
-    </div>
-<div style="text-align: right; margin-bottom: 20px; margin-top: 20px;">
-    <a href="logout.php" style="background-color: #e74c3c; color: white; padding: 8px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-left: 10px;">Logout</a>
-</div>
-</body>
+                    <form action="add_product.php" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">Product Name</label>
+                            <input type="text" name="p_name" class="form-control rounded-3" placeholder="e.g. iPhone 15" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">Price (₹)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">₹</span>
+                                <input type="number" step="0.01" name="p_price" class="form-control rounded-end-3" placeholder="e.g. 79999" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">Stock Quantity</label>
+                            <input type="number" name="p_stock" class="form-control rounded-3" placeholder="e.g. 15" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-secondary">Product Image</label>
+                            <input type="file" name="p_image" class="form-control rounded-3" accept="image/*" required>
+                        </div>
+                        <button type="submit" name="add_product_btn" class="btn btn-primary w-100 rounded-3 fw-bold"><i class="fa-solid fa-plus me-1"></i> Add To Inventory</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 p-3">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-dark mb-3"><i class="fa-solid fa-list-check text-success me-2"></i>Live Shop Inventory</h5>
+                    <hr class="text-muted">
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col" style="width: 8%;">ID</th>
+                                    <th scope="col" style="width: 15%;">Image</th>
+                                    <th scope="col" style="width: 35%;">Product Name</th>
+                                    <th scope="col" style="width: 17%;">Price</th>
+                                    <th scope="col" style="width: 15%;">Stock</th>
+                                    <th scope="col" style="width: 10%; text-align: center;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                include 'connection.php';
+
+                                $sql = "SELECT * FROM inventory";
+                                $result = $conn->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr>";
+                                        echo "<td class='fw-bold text-secondary'>#" . $row['id'] . "</td>";
+                                        
+                                        $img_name = !empty($row['image']) ? $row['image'] : 'default.png';
+                                        echo "<td><img src='uploads/" . $img_name . "' alt='Product' class='product-img border shadow-sm'></td>";
+                                        
+                                        echo "<td class='fw-semibold text-dark'>" . htmlspecialchars($row['product_name']) . "</td>";
+                                        echo "<td class='text-primary fw-bold'>₹" . number_format($row['price'], 2) . "</td>";
+                                        
+                                       
+                                        $stock = $row['stock'];
+                                        if($stock == 0) {
+                                            echo "<td><span class='badge bg-danger rounded-pill'>Out of Stock</span></td>";
+                                        } else if($stock <= 5) {
+                                            echo "<td><span class='badge bg-warning text-dark rounded-pill'>" . $stock . " Low Stock</span></td>";
+                                        } else {
+                                            echo "<td><span class='badge bg-success rounded-pill'>" . $stock . " Available</span></td>";
+                                        }
+                                      
+                                        echo "<td style='white-space: nowrap; text-align: center;'>";
+                                        echo "<a href='edit.php?edit_id=" . $row['id'] . "' class='btn btn-sm btn-outline-warning me-1' title='Edit'><i class='fa-solid fa-pen'></i></a>";
+                                        echo "<a href='delete.php?delete_id=" . $row['id'] . "' class='btn btn-sm btn-outline-danger' title='Delete' onclick='return confirm(\"Are you sure you want to delete this?\")'><i class='fa-solid fa-trash'></i></a>";
+                                        echo "</td>";
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='6' class='text-center py-4 text-muted'>No Products Found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+    </div> </div> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

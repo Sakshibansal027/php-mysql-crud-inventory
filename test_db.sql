@@ -26,4 +26,9 @@ select* from inventory;
 
 delete from inventory where id=3;
 
+ALTER TABLE inventory ADD COLUMN image VARCHAR(255) DEFAULT 'default.png' AFTER stock;
+
 select* from inventory;
+
+
+
